@@ -90,4 +90,18 @@ def parse_compound_spreadsheet(file_obj):
     if not compounds:
         raise SpreadsheetParseError("No valid compound rows found in the spreadsheet.")
 
+    #Raise error if duplicate barcode in 1 file
+    seen = set()
+    duplicates = set()
+    for compound in compounds:
+        barcode = compound['container_barcode']
+        if barcode in seen:
+            duplicates.add(barcode)
+        seen.add(barcode)
+
+    if duplicates:
+        raise SpreadsheetParseError(
+            f"Duplicate barcode(s) found: {', '.join(str(b) for b in sorted(duplicates))}"
+        )
+
     return compounds

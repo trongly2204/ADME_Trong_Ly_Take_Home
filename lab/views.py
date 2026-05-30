@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.db.models import Count
+from django.db.models import Count, Q
 
 from .models import AssayType, TestRequest, Compound
 from .forms import AssaySelectForm, CompoundUploadForm, StatusUpdateForm
@@ -18,8 +18,8 @@ def assay_select(request):
             return redirect('lab:upload_compounds', assay_id=assay_id)
     else:
         form = AssaySelectForm()
-
-    assays = AssayType.objects.filter(is_active=True).order_by('category', 'name')
+    #Add annotate to count pending in each assay
+    assays = AssayType.objects.filter(is_active=True).annotate(pending_count=Count('requests', filter=Q(requests__status='PENDING'))).order_by('category', 'name')
     return render(request, 'lab/assay_select.html', {'form': form, 'assays': assays})
 
 
@@ -111,17 +111,24 @@ def assay_dashboard(request):
     Scientist view: all requests aggregated across all users, grouped by assay.
     Allows inline status updates.
     """
+    #Add status request
+    status = request.GET.get("status", "all")
     assays = (
         AssayType.objects
         .filter(is_active=True)
         .prefetch_related('requests__requested_by', 'requests__compounds')
         .annotate(request_count=Count('requests'))
         .order_by('category', 'name')
-    )
+    )    
 
     # Build a status form for each request (used in the template)
     status_forms = {}
     all_requests = TestRequest.objects.select_related('assay', 'requested_by').order_by('-created_at')
+
+    #Add condition
+    if status != "all":
+        all_requests = all_requests.filter(status=status)
+
     for tr in all_requests:
         status_forms[tr.pk] = StatusUpdateForm(instance=tr)
 
@@ -129,6 +136,7 @@ def assay_dashboard(request):
         'assays': assays,
         'all_requests': all_requests,
         'status_forms': status_forms,
+        'selected_status': status, # passes current filter 
     })
 
 

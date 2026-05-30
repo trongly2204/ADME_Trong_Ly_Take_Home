@@ -42,8 +42,9 @@ class StatusUpdateForm(forms.ModelForm):
 
     class Meta:
         model = TestRequest
-        fields = ['status', 'notes']
+        fields = ['status','priority','notes']
         widgets = {
             'status': forms.Select(attrs={'class': 'form-select form-select-sm'}),
+            'priority': forms.Select(attrs={'class': 'form-select form-select'}), #Add priority
             'notes': forms.Textarea(attrs={'rows': 2, 'class': 'form-control form-control-sm'}),
         }

@@ -23,6 +23,7 @@
           <th>Compounds</th>
           <th>Submitted</th>
           <th>Status</th>
+          <th>Priority</th> <!-- Add priority form-->
         </tr>
       </thead>
       <tbody>
@@ -46,6 +47,17 @@
             <span class="badge bg-secondary">On Hold</span>
             {% endif %}
           </td>
+          <!-- Add priority status by using Bootstrap -->
+          <td>
+            {% if tr.priority == 'URGENT' %}
+              <span class="badge bg-danger">Urgent</span>
+            {% elif tr.priority == 'HIGH' %}
+              <span class="badge bg-warning text-dark">High</span>
+            {% else %}
+              <span class="badge bg-secondary">Normal</span>
+            {% endif %}  
+          </td>
+          <!-- Add priority form-->
         </tr>
         {% endfor %}
       </tbody>
