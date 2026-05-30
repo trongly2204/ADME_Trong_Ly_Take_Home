@@ -24,6 +24,13 @@
         <div class="d-flex justify-content-between align-items-start mb-2">
           <span class="badge bg-primary-subtle text-primary-emphasis">{{ assay.code }}</span>
           <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ assay.turnaround_days }}d</small>
+          <!-- Assay Pending Count by using Bootstrap -->
+          <span class="badge {% if assay.pending_count %}bg-warning text-dark{% else %}bg-secondary{% endif %}">
+            {{ assay.pending_count }} pending
+          </span>
+
+        </div>
+
         </div>
         <h6 class="card-title mb-1">{{ assay.name }}</h6>
         <p class="card-text small text-muted">{{ assay.description|truncatechars:120 }}</p>

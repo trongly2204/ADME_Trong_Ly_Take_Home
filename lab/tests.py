@@ -142,6 +142,27 @@ class ParseSpreadsheetTest(TestCase):
         result = parse_compound_spreadsheet(xlsx)
         self.assertEqual(result[0]['drug_name'], 'Metformin')
 
+    def test_raises_on_duplicate_barcodes(self):
+        xlsx = self._make_xlsx([
+            ('Drug Name', 'Batch Number', 'Container Barcode'),
+            ('Acetaminophen', 'BN-001', 11111111),
+            ('Ibuprofen', 'BN-002', 11111111),  # duplicate barcode
+        ])
+        with self.assertRaises(SpreadsheetParseError) as ctx:
+            parse_compound_spreadsheet(xlsx)
+        self.assertIn('duplicate', str(ctx.exception).lower())
+        self.assertIn('11111111', str(ctx.exception))
+
+    def test_unique_barcodes_does_not_raise(self):
+        xlsx = self._make_xlsx([
+            ('Drug Name', 'Batch Number', 'Container Barcode'),
+            ('Acetaminophen', 'BN-001', 1000000001),
+            ('Ibuprofen', 'BN-002', 1000000002),
+            ('Metformin', 'BN-003', 1000000003),
+        ])
+        result = parse_compound_spreadsheet(xlsx)
+        self.assertEqual(len(result), 3)
+
 
 # ---------------------------------------------------------------------------
 # View tests
@@ -207,6 +228,21 @@ class AssayDashboardViewTest(TestCase):
             reverse('lab:update_request_status', args=[tr.pk]),
             {'status': TestRequest.Status.IN_PROGRESS, 'notes': 'Started today'},
         )
+        self.client.post(
+            reverse('lab:update_request_status', args=[tr.pk]),
+            {'status': TestRequest.Status.IN_PROGRESS, 'priority': TestRequest.Priority.NORMAL, 'notes': 'Started today'},
+        )
         tr.refresh_from_db()
         self.assertEqual(tr.status, TestRequest.Status.IN_PROGRESS)
         self.assertEqual(tr.notes, 'Started today')
+    def test_filter_by_status_returns_only_matching_requests(self):
+        pending_req = TestRequest.objects.create(assay=self.assay, requested_by=self.researcher)
+        complete_req = TestRequest.objects.create(
+            assay=self.assay, requested_by=self.researcher, status=TestRequest.Status.COMPLETE
+        )
+        self.client.login(username='scientist', password='testpass123')
+        response = self.client.get(reverse('lab:assay_dashboard') + '?status=PENDING')
+        requests_in_context = list(response.context['all_requests'])
+        self.assertIn(pending_req, requests_in_context)
+        self.assertNotIn(complete_req, requests_in_context)
+    

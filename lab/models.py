@@ -36,10 +36,16 @@ class TestRequest(models.Model):
         IN_PROGRESS = 'IN_PROGRESS', 'In Progress'
         COMPLETE = 'COMPLETE', 'Complete'
         ON_HOLD = 'ON_HOLD', 'On Hold'
-
+    #Add class Priority class
+    class Priority(models.TextChoices):
+        NORMAL = 'NORMAL', 'Normal'
+        HIGH = 'HIGH', 'High'
+        URGENT = 'URGENT', 'Urgent'
     assay = models.ForeignKey(AssayType, on_delete=models.PROTECT, related_name='requests')
     requested_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name='test_requests')
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
+    #Add class Priority
+    priority = models.CharField(max_length=20, choices=Priority.choices, default=Priority.NORMAL) 
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -67,3 +73,4 @@ class Compound(models.Model):
 
     def __str__(self):
         return f"{self.drug_name} ({self.batch_number})"
+
