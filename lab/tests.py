@@ -228,6 +228,10 @@ class AssayDashboardViewTest(TestCase):
             reverse('lab:update_request_status', args=[tr.pk]),
             {'status': TestRequest.Status.IN_PROGRESS, 'notes': 'Started today'},
         )
+        self.client.post(
+            reverse('lab:update_request_status', args=[tr.pk]),
+            {'status': TestRequest.Status.IN_PROGRESS, 'priority': TestRequest.Priority.NORMAL, 'notes': 'Started today'},
+        )
         tr.refresh_from_db()
         self.assertEqual(tr.status, TestRequest.Status.IN_PROGRESS)
         self.assertEqual(tr.notes, 'Started today')
