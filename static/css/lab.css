@@ -1,0 +1,27 @@
+/* ADME Lab Portal styles */
+
+.assay-card {
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.assay-card:hover {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 1px #0d6efd, 0 4px 12px rgba(13, 110, 253, 0.12) !important;
+}
+
+.assay-card.selected {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 2px #0d6efd !important;
+  background-color: #f0f6ff;
+}
+
+.assay-card.selected::after {
+  content: "✓";
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  color: #0d6efd;
+  font-weight: bold;
+}
+
+.assay-card { position: relative; }

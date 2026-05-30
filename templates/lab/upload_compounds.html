@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Upload Compounds — ADME Lab Portal{% endblock %}
+{% block content %}
+
+<div class="row mb-4">
+  <div class="col">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'lab:assay_select' %}">Select Assay</a></li>
+        <li class="breadcrumb-item active">Upload Compounds</li>
+      </ol>
+    </nav>
+    <h1 class="h3">Upload Compound List</h1>
+    <p class="text-muted">Step 2 of 3 — Upload an Excel spreadsheet for <strong>{{ assay.name }}</strong></p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label class="form-label fw-medium">{{ form.spreadsheet.label }}</label>
+            {{ form.spreadsheet }}
+            <div class="form-text">{{ form.spreadsheet.help_text }}</div>
+            {% if form.spreadsheet.errors %}
+            <div class="text-danger small mt-1">{{ form.spreadsheet.errors }}</div>
+            {% endif %}
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-medium">{{ form.notes.label }}</label>
+            {{ form.notes }}
+          </div>
+
+          <div class="d-flex gap-2">
+            <a href="{% url 'lab:assay_select' %}" class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-left me-1"></i>Back
+            </a>
+            <button type="submit" class="btn btn-primary">
+              Preview Compounds <i class="bi bi-arrow-right ms-1"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5 offset-lg-1 mt-4 mt-lg-0">
+    <div class="card border-0 bg-light">
+      <div class="card-body">
+        <h6 class="fw-bold mb-3"><i class="bi bi-info-circle me-1 text-primary"></i>Spreadsheet format</h6>
+        <p class="small text-muted mb-2">Your .xlsx file must have these column headers in row 1:</p>
+        <table class="table table-sm table-bordered small mb-3">
+          <thead class="table-light">
+            <tr><th>Column</th><th>Type</th><th>Example</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Drug Name</code></td><td>Text</td><td>Acetaminophen</td></tr>
+            <tr><td><code>Batch Number</code></td><td>Text</td><td>BN-2024-001</td></tr>
+            <tr><td><code>Container Barcode</code></td><td>Integer</td><td>1000234567</td></tr>
+          </tbody>
+        </table>
+        <p class="small text-muted mb-0">Column order does not matter. Headers are case-insensitive. Blank rows are skipped.</p>
+      </div>
+    </div>
+
+    <div class="card border-0 bg-primary-subtle mt-3">
+      <div class="card-body small">
+        <strong>{{ assay.code }}</strong> — {{ assay.name }}<br>
+        <span class="text-muted">Turnaround: ~{{ assay.turnaround_days }} business days</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,122 @@
+[
+  {
+    "model": "lab.assaytype",
+    "pk": 1,
+    "fields": {
+      "name": "Kinetic Aqueous Solubility (Nephelometry)",
+      "code": "SOL-NEP",
+      "category": "SOL",
+      "description": "Measures kinetic aqueous solubility by adding a DMSO stock solution to aqueous buffer and detecting precipitation by nephelometry. Provides a rapid screen for solubility at pH 7.4.",
+      "turnaround_days": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "lab.assaytype",
+    "pk": 2,
+    "fields": {
+      "name": "Thermodynamic Solubility (HPLC)",
+      "code": "SOL-HPLC",
+      "category": "SOL",
+      "description": "Equilibrium solubility determined by saturated shake-flask method followed by HPLC quantification. More accurate than nephelometry; typically run at pH 6.8 and 7.4.",
+      "turnaround_days": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "lab.assaytype",
+    "pk": 3,
+    "fields": {
+      "name": "PAMPA Permeability (pH 7.4)",
+      "code": "PER-PAMPA",
+      "category": "PER",
+      "description": "Parallel Artificial Membrane Permeability Assay. Measures passive transcellular permeability across a hexadecane/phospholipid membrane. High-throughput surrogate for intestinal absorption.",
+      "turnaround_days": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "lab.assaytype",
+    "pk": 4,
+    "fields": {
+      "name": "Caco-2 Bidirectional Permeability",
+      "code": "PER-CACO2",
+      "category": "PER",
+      "description": "Bidirectional transport assay in Caco-2 cell monolayers measuring apical-to-basolateral (A→B) and basolateral-to-apical (B→A) permeability. Efflux ratio identifies P-gp substrates.",
+      "turnaround_days": 7,
+      "is_active": true
+    }
+  },
+  {
+    "model": "lab.assaytype",
+    "pk": 5,
+    "fields": {
+      "name": "Human Liver Microsomal Stability (HLM)",
+      "code": "MET-HLM",
+      "category": "MET",
+      "description": "Incubation with pooled human liver microsomes and NADPH cofactor. Measures intrinsic clearance (CLint) and half-life to predict hepatic first-pass metabolism.",
+      "turnaround_days": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "lab.assaytype",
+    "pk": 6,
+    "fields": {
+      "name": "Rat Liver Microsomal Stability (RLM)",
+      "code": "MET-RLM",
+      "category": "MET",
+      "description": "Metabolic stability assay using pooled rat liver microsomes. Provides species comparison data alongside HLM to support in vivo rat PK study design.",
+      "turnaround_days": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "lab.assaytype",
+    "pk": 7,
+    "fields": {
+      "name": "Hepatocyte Intrinsic Clearance",
+      "code": "MET-HEP",
+      "category": "MET",
+      "description": "Suspension hepatocyte stability assay providing whole-cell metabolic clearance, capturing both Phase I (CYP) and Phase II (UGT, SULT) metabolism.",
+      "turnaround_days": 7,
+      "is_active": true
+    }
+  },
+  {
+    "model": "lab.assaytype",
+    "pk": 8,
+    "fields": {
+      "name": "Plasma Protein Binding (Rapid Equilibrium Dialysis)",
+      "code": "PPB-RED",
+      "category": "PPB",
+      "description": "Measures fraction unbound (fu) in human and/or rat plasma using rapid equilibrium dialysis (RED). Key parameter for free drug hypothesis and PK/PD modelling.",
+      "turnaround_days": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "lab.assaytype",
+    "pk": 9,
+    "fields": {
+      "name": "P-glycoprotein Efflux (LLC-PK1-MDR1)",
+      "code": "EFX-PGP",
+      "category": "EFX",
+      "description": "Bidirectional transport in MDR1-transfected LLC-PK1 cells. Efflux ratio > 2 indicates P-gp substrate; used to predict CNS penetration and oral bioavailability limitations.",
+      "turnaround_days": 7,
+      "is_active": true
+    }
+  },
+  {
+    "model": "lab.assaytype",
+    "pk": 10,
+    "fields": {
+      "name": "BCRP Efflux (MDCK-BCRP)",
+      "code": "EFX-BCRP",
+      "category": "EFX",
+      "description": "Bidirectional transport in BCRP-transfected MDCK cells. Identifies breast cancer resistance protein substrates which may limit absorption and CNS penetration.",
+      "turnaround_days": 7,
+      "is_active": true
+    }
+  }
+]

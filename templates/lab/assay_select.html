@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Select Assay — ADME Lab Portal{% endblock %}
+{% block content %}
+
+<div class="row mb-4">
+  <div class="col">
+    <h1 class="h3">New Test Request</h1>
+    <p class="text-muted">Step 1 of 3 — Choose the assay you want to run</p>
+  </div>
+</div>
+
+<!-- Assay catalogue cards -->
+{% regroup assays by get_category_display as category_list %}
+{% for group in category_list %}
+<h5 class="text-uppercase text-muted small fw-bold mt-4 mb-2">{{ group.grouper }}</h5>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-2">
+  {% for assay in group.list %}
+  <div class="col">
+    <div class="card h-100 assay-card border-0 shadow-sm"
+         data-assay-id="{{ assay.pk }}"
+         style="cursor:pointer;"
+         onclick="selectAssay({{ assay.pk }})">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <span class="badge bg-primary-subtle text-primary-emphasis">{{ assay.code }}</span>
+          <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ assay.turnaround_days }}d</small>
+        </div>
+        <h6 class="card-title mb-1">{{ assay.name }}</h6>
+        <p class="card-text small text-muted">{{ assay.description|truncatechars:120 }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endfor %}
+
+<!-- Hidden form that submits the chosen assay -->
+<form method="post" id="assay-form" class="mt-4">
+  {% csrf_token %}
+  <input type="hidden" name="assay" id="selected-assay-id" value="">
+  <div class="d-flex align-items-center gap-3">
+    <button type="submit" class="btn btn-primary px-4" id="continue-btn" disabled>
+      Continue to Upload <i class="bi bi-arrow-right ms-1"></i>
+    </button>
+    <span id="selection-label" class="text-muted small">No assay selected</span>
+  </div>
+  {% if form.assay.errors %}
+  <div class="text-danger small mt-2">{{ form.assay.errors }}</div>
+  {% endif %}
+</form>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function selectAssay(id) {
+  document.querySelectorAll('.assay-card').forEach(c => c.classList.remove('selected'));
+  const card = document.querySelector(`.assay-card[data-assay-id="${id}"]`);
+  card.classList.add('selected');
+  document.getElementById('selected-assay-id').value = id;
+  document.getElementById('continue-btn').disabled = false;
+  document.getElementById('selection-label').textContent =
+    card.querySelector('.card-title').textContent.trim();
+}
+</script>
+{% endblock %}
